@@ -1,0 +1,94 @@
+import { useState } from 'react';
+import { Project } from '../types/Project';
+import { updateProject } from '../api/ProjectsAPI';
+
+// This component will handle the form for adding a new project
+interface EditProjectFormProps {
+  project: Project;
+  onSuccess: () => void;
+  onCancel: () => void;
+}
+const EditProjectForm = ({
+  project,
+  onSuccess,
+  onCancel,
+}: EditProjectFormProps) => {
+  const [formData, setFormData] = useState<Project>({ ...project }); //default is project passed in
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value }); //set equal to whatever what in form and add whatever was typed in into form data
+  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    //prevent default and await data
+    e.preventDefault();
+    await updateProject(formData.projectId, formData);
+    onSuccess(); //got the data!
+  };
+  return (
+    //form fields
+    <form onSubmit={handleSubmit}>
+      <h2>Add New Project</h2>
+      <div className="form-grid">
+        <label>
+          Project Name:
+          <input
+            type="text"
+            name="projectName"
+            value={formData.projectName}
+            onChange={handleChange} //like asp.for
+          />
+        </label>
+        <label>
+          Project Type:
+          <input
+            type="text"
+            name="projectType"
+            value={formData.projectType}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          Regional Program:
+          <input
+            type="text"
+            name="projectRegionalProgram" //remember to match name in project.ts
+            value={formData.projectRegionalProgram}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          Impact:
+          <input
+            type="number"
+            name="projectImpact"
+            value={formData.projectImpact}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          Project Phase:
+          <input
+            type="text"
+            name="projectPhase"
+            value={formData.projectPhase}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          Project Functionality Status:
+          <input
+            type="text"
+            name="projectFunctionalityStatus"
+            value={formData.projectFunctionalityStatus}
+            onChange={handleChange}
+          />
+        </label>
+        <button type="submit">Update Project</button>
+        <button type="button" onClick={onCancel}>
+          Cancel
+        </button>
+      </div>
+    </form>
+  );
+};
+export default EditProjectForm;
