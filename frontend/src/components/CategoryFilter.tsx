@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './CategoryFilter.css';
+import { useNavigate } from 'react-router-dom';
 
 function CategoryFilter({
   selectedCategories,
@@ -9,7 +10,7 @@ function CategoryFilter({
   setSelectedCategories: (categories: string[]) => void;
 }) {
   const [categories, setCategories] = useState<string[]>([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -51,6 +52,7 @@ function CategoryFilter({
           </div>
         ))}
       </div>
+      <button onClick={() => navigate('/adminprojects')}>Go Back</button>
     </div>
   );
 }
